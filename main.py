@@ -69,12 +69,15 @@ def list_courses(
     db: SessionDep,
     page: PaginationDep,
     is_elective: bool | None = None,
+    level: str | None = None,
     sort: Literal["popular", "title"] = "popular",
 ):
     time.sleep(0.2)
     stmt = select(Course)
     if is_elective is not None:
         stmt = stmt.where(Course.is_elective == is_elective)
+    if level is not None:
+        stmt = stmt.where(Course.level == level)
 
     if sort == "title":
         stmt = stmt.order_by(Course.title)
