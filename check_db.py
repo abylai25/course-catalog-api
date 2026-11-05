@@ -1,7 +1,13 @@
+"""check_db.py — verify database connectivity and print connection info.
+
+Run:  python check_db.py
+Expected output example:
+    connected to course_catalog as catalog_app, PostgreSQL 16.3
+"""
+
 from sqlalchemy import text
 
 from db import engine
-
 
 with engine.connect() as connection:
     database, user = connection.execute(

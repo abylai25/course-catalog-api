@@ -1,5 +1,15 @@
-fastapi[standard]
-sqlalchemy
-psycopg[binary]
-alembic
-pydantic-settings
+# Core API framework (includes uvicorn, httpx, python-multipart, etc.)
+fastapi[standard]>=0.115.0,<1.0
+
+# ORM and database
+sqlalchemy>=2.0.36,<3.0
+psycopg[binary]>=3.2.0,<4.0
+
+# Migrations
+alembic>=1.13.0,<2.0
+
+# Settings management
+pydantic-settings>=2.5.0,<3.0
+
+# HTTP client used by try_errors.py
+httpx>=0.27.0,<1.0

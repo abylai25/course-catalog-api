@@ -13,8 +13,11 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from config import settings
 
+# Naming convention aligns generated constraint/index names with the
+# PostgreSQL conventions established in Lab 6 so that alembic --autogenerate
+# produces names that match the live database.
 NAMING_CONVENTION = {
-    "ix": "%(table_name)s_%(column_0_name)s_idx",
+    "ix": "%(table_name)s_%(column_0_N_name)s_idx",
     "uq": "%(table_name)s_%(column_0_N_name)s_key",
     "ck": "%(table_name)s_%(constraint_name)s_check",
     "fk": "%(table_name)s_%(column_0_name)s_fkey",
