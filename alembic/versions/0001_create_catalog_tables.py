@@ -3,12 +3,19 @@
 Revision ID: 0001
 Revises:
 Create Date: 2026-10-30
+
+Creates the three core tables — courses, students, enrollments — with all
+constraints, foreign keys, and indexes as defined in models.py.
+
+To adopt an existing Lab 6 database instead of re-creating it:
+    alembic stamp 0001
+Then run `alembic upgrade head` to apply only migration 0002 onwards.
 """
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 revision: str = "0001"
 down_revision: Union[str, Sequence[str], None] = None
@@ -24,9 +31,17 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), nullable=False),
         sa.Column("credits", sa.Integer(), nullable=False),
         sa.Column(
-            "is_elective", sa.Boolean(), server_default=sa.text("false"), nullable=False
+            "is_elective",
+            sa.Boolean(),
+            server_default=sa.text("false"),
+            nullable=False,
         ),
-        sa.Column("likes", sa.Integer(), server_default=sa.text("0"), nullable=False),
+        sa.Column(
+            "likes",
+            sa.Integer(),
+            server_default=sa.text("0"),
+            nullable=False,
+        ),
         sa.CheckConstraint("credits > 0", name="courses_credits_check"),
         sa.CheckConstraint("likes >= 0", name="courses_likes_check"),
         sa.PrimaryKeyConstraint("id", name="courses_pkey"),
@@ -34,20 +49,24 @@ def upgrade() -> None:
     op.create_table(
         "students",
         sa.Column(
-            "id", sa.BigInteger(), sa.Identity(always=True), nullable=False
+            "id",
+            sa.BigInteger(),
+            sa.Identity(always=True),
+            nullable=False,
         ),
         sa.Column("name", sa.Text(), nullable=False),
         sa.Column("email", sa.Text(), nullable=False),
-        sa.CheckConstraint(
-            "char_length(name) >= 2", name="students_name_check"
-        ),
+        sa.CheckConstraint("char_length(name) >= 2", name="students_name_check"),
         sa.PrimaryKeyConstraint("id", name="students_pkey"),
         sa.UniqueConstraint("email", name="students_email_key"),
     )
     op.create_table(
         "enrollments",
         sa.Column(
-            "id", sa.BigInteger(), sa.Identity(always=True), nullable=False
+            "id",
+            sa.BigInteger(),
+            sa.Identity(always=True),
+            nullable=False,
         ),
         sa.Column("course_id", sa.Text(), nullable=False),
         sa.Column("student_id", sa.BigInteger(), nullable=False),
@@ -71,11 +90,16 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id", name="enrollments_pkey"),
         sa.UniqueConstraint(
-            "course_id", "student_id", name="enrollments_course_id_student_id_key"
+            "course_id",
+            "student_id",
+            name="enrollments_course_id_student_id_key",
         ),
     )
     op.create_index(
-        "enrollments_student_id_idx", "enrollments", ["student_id"], unique=False
+        "enrollments_student_id_idx",
+        "enrollments",
+        ["student_id"],
+        unique=False,
     )
 
 
